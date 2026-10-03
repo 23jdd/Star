@@ -108,6 +108,36 @@ func TestBoxArrangesInsets(t *testing.T) {
 	}
 }
 
+func TestBoxAlignsFittedContent(t *testing.T) {
+	button := NewButton("OK")
+	box := NewBox(button)
+	box.Border = &RoundedBorder
+	box.Padding = UniformInsets(1)
+	box.FitContent = true
+	box.Arrange(NewRect(0, 0, 20, 7))
+	if got, want := button.Bounds(), NewRect(8, 3, 4, 1); got != want {
+		t.Fatalf("centered child bounds=%#v want=%#v", got, want)
+	}
+
+	box.Align = AlignRight
+	box.VerticalAlign = AlignBottom
+	box.Arrange(NewRect(0, 0, 20, 7))
+	if got, want := button.Bounds(), NewRect(14, 4, 4, 1); got != want {
+		t.Fatalf("bottom-right child bounds=%#v want=%#v", got, want)
+	}
+}
+
+func TestBoxFillsChildByDefault(t *testing.T) {
+	button := NewButton("OK")
+	box := NewBox(button)
+	box.Border = &RoundedBorder
+	box.Padding = UniformInsets(1)
+	box.Arrange(NewRect(0, 0, 20, 7))
+	if got, want := button.Bounds(), NewRect(2, 2, 16, 3); got != want {
+		t.Fatalf("child bounds=%#v want=%#v", got, want)
+	}
+}
+
 func TestScrollViewClampsOffset(t *testing.T) {
 	view := NewScrollView("one\ntwo\nthree\nfour")
 	view.Arrange(NewRect(0, 0, 10, 2))

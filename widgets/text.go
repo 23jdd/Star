@@ -28,6 +28,18 @@ const (
 	AlignRight
 )
 
+// VerticalAlign controls vertical placement inside an available area.
+type VerticalAlign uint8
+
+const (
+	// AlignTop places content at the top edge.
+	AlignTop VerticalAlign = iota
+	// AlignMiddle centres content vertically.
+	AlignMiddle
+	// AlignBottom places content at the bottom edge.
+	AlignBottom
+)
+
 // NewText creates left-aligned, unwrapped text.
 func NewText(content string) *Text {
 	return &Text{Content: content, Style: tcell.StyleDefault}

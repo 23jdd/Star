@@ -161,6 +161,19 @@ stack.Add(child, basis, flex)
 单子节点装饰容器。支持 `Padding`、`Border`、`Title`、`Style` 和
 `BorderStyle`。内置 `RoundedBorder`、`SquareBorder` 和 `DoubleBorder`。
 
+默认情况下 Child 填满扣除边框和 Padding 后的内部区域。设置 `FitContent=true` 后，
+Box 会使用 Child 的 `Measure` 尺寸，并通过 `AlignLeft` / `AlignCenter` /
+`AlignRight` 及 `AlignTop` / `AlignMiddle` / `AlignBottom` 定位：
+
+```go
+box := widgets.NewBox(button)
+box.Border = &widgets.RoundedBorder
+box.Padding = widgets.UniformInsets(1)
+box.FitContent = true
+box.Align = widgets.AlignCenter
+box.VerticalAlign = widgets.AlignMiddle
+```
+
 #### Overlay
 
 所有子组件获得相同边界，后加入的组件绘制在上层，命中测试也优先选择后加入的组件。
@@ -219,7 +232,9 @@ picture.Fit = widgets.ImageFitContain
 #### Button
 
 支持普通、焦点和禁用样式。实现 `Focusable`，Enter 或空格会由 Router 合成
-`Click`。通过 `On(Click, false, handler)` 处理激活。
+`Click`。通过 `On(Click, false, handler)` 处理激活。`Align` 使用 `AlignLeft`、
+`AlignCenter` 或 `AlignRight` 控制按钮边界内的文字位置，`NewButton` 默认居中；
+`Padding` 控制左右内边距。
 
 #### Input
 

@@ -10,6 +10,7 @@ Message -> Update -> Model -> View -> Measure / Arrange / Render
 
 ## 文档导航
 
+- [从入门到生产实践教程](docs/tutorial.md)
 - [安装与最小应用](#安装)
 - [运行时](#运行时)
 - [Widget 与布局](#widget-与布局)

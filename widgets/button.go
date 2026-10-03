@@ -16,6 +16,7 @@ type Button struct {
 	Focused       bool
 	Disabled      bool
 	Padding       int
+	Align         TextAlign
 }
 
 // NewButton creates an enabled button with default terminal styles.
@@ -26,6 +27,7 @@ func NewButton(content string) *Button {
 		FocusedStyle:  tcell.StyleDefault.Foreground(tcell.ColorBlack).Background(tcell.ColorLightBlue).Bold(true),
 		DisabledStyle: tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.ColorBlack),
 		Padding:       1,
+		Align:         AlignCenter,
 	}
 }
 
@@ -47,7 +49,15 @@ func (b *Button) Render(screen tcell.Screen) {
 	}
 	fill(screen, b.Bounds(), ' ', style)
 	padding := max(0, b.Padding)
-	drawText(screen, b.Bounds().X+padding, b.Bounds().Y, b.Bounds().W-padding*2, b.Content, style)
+	contentX := b.Bounds().X + padding
+	contentWidth := max(0, b.Bounds().W-padding*2)
+	textWidth := uniseg.StringWidth(b.Content)
+	if b.Align == AlignCenter {
+		contentX += max(0, (contentWidth-textWidth)/2)
+	} else if b.Align == AlignRight {
+		contentX += max(0, contentWidth-textWidth)
+	}
+	drawText(screen, contentX, b.Bounds().Y, contentWidth, b.Content, style)
 }
 
 func (b *Button) HandlerEvent(*Event) {}

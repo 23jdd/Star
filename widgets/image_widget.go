@@ -21,17 +21,16 @@ const (
 	ImageFitNone
 )
 
-// ImageVerticalAlign controls vertical placement when the fitted image is
-// smaller than its available area.
-type ImageVerticalAlign uint8
+// ImageVerticalAlign is kept as a descriptive alias for VerticalAlign.
+type ImageVerticalAlign = VerticalAlign
 
 const (
 	// ImageAlignTop places an image at the top edge.
-	ImageAlignTop ImageVerticalAlign = iota
+	ImageAlignTop = AlignTop
 	// ImageAlignMiddle centres an image vertically.
-	ImageAlignMiddle
+	ImageAlignMiddle = AlignMiddle
 	// ImageAlignBottom places an image at the bottom edge.
-	ImageAlignBottom
+	ImageAlignBottom = AlignBottom
 )
 
 // Image renders a Go image.Image with true-colour terminal cells. Each cell

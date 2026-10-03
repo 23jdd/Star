@@ -36,11 +36,22 @@ type Box struct {
 	Style       tcell.Style
 	BorderStyle tcell.Style
 	Title       string
+	// FitContent gives Child its measured size instead of filling the inner
+	// area. Align and VerticalAlign position that measured rectangle.
+	FitContent    bool
+	Align         TextAlign
+	VerticalAlign VerticalAlign
 }
 
 // NewBox creates an undecorated single-child box.
 func NewBox(child Widget) *Box {
-	box := &Box{Child: child, Style: tcell.StyleDefault, BorderStyle: tcell.StyleDefault}
+	box := &Box{
+		Child:         child,
+		Style:         tcell.StyleDefault,
+		BorderStyle:   tcell.StyleDefault,
+		Align:         AlignCenter,
+		VerticalAlign: AlignMiddle,
+	}
 	box.attach()
 	return box
 }
@@ -89,6 +100,24 @@ func (b *Box) Arrange(bounds Rect) {
 	y += max(0, b.Padding.Top)
 	width -= max(0, b.Padding.Left) + max(0, b.Padding.Right)
 	height -= max(0, b.Padding.Top) + max(0, b.Padding.Bottom)
+	width, height = max(0, width), max(0, height)
+	if b.FitContent && width > 0 && height > 0 {
+		size := b.Child.Measure(Loose(width, height))
+		childWidth, childHeight := min(width, size.W), min(height, size.H)
+		switch b.Align {
+		case AlignCenter:
+			x += (width - childWidth) / 2
+		case AlignRight:
+			x += width - childWidth
+		}
+		switch b.VerticalAlign {
+		case AlignMiddle:
+			y += (height - childHeight) / 2
+		case AlignBottom:
+			y += height - childHeight
+		}
+		width, height = childWidth, childHeight
+	}
 	b.Child.Arrange(NewRect(x, y, width, height))
 }
 
